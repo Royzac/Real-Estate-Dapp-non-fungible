@@ -22,8 +22,7 @@ INSTRUCTION TO SET-UP:
 
 Latest Nodejs must be installed
 Once my repo is cloned, type npm install, this will install all my package depencencies from package.json
-
-
+Unit tests should be done through truffle and ganache on port 8545
 
 
 "former project idea: The aim of this application will be to decentralize real estate financing.
