@@ -1,6 +1,7 @@
 Deployed on Fleek
 
 PROBLEM:
+
 Real estate transaction are heavily dependent upon legacy processes that expose the transaction to more risk and reduce expendiancy.
 The solution is provide a disintermidiate process where all terms can be fulfilled throught the blockchain.
 
@@ -9,15 +10,19 @@ both a signed contract and a deed for collateral, or to place a lien upon. This 
 to undercut prevailing interest rates in conjunction with a fractional lending system.
 
 
-Design Patterns:
+DESIGN PATTERNS:
 
 Inheritance(ownable)
 Gas optimization through lower uint size and use of calldata over in-memory where appropiate
 
-Security Measures:
+SECURTIY MEASURES:
 Access control design patterns using modifier and require functions
 Tx.Origin transaction authentication
 
+INSTRUCTION TO SET-UP:
+
+Latest Nodejs must be installed
+Once my repo is cloned, type npm install, this will install all my package depencencies from package.json
 
 FORMER(Project): The aim of this application will be to decentralize real estate financing.
 The first step will be to provide credentials/loan request to a financing party to be approved for a specified loan amount.
