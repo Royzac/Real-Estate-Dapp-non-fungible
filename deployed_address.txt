@@ -1,0 +1,4 @@
+Where my contract is deployed.
+
+testnet address: 
+testnet network: ropsten
