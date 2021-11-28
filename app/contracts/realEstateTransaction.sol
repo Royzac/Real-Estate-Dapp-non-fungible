@@ -2,6 +2,8 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract realEstateTransaction is Ownable{
+    constructor() Ownable() {
+    }
 
     event Mint(address indexed _to, uint16 tokenProperty,string status);
     event noMint(address indexed _to, string status);
@@ -14,24 +16,6 @@ contract realEstateTransaction is Ownable{
     mapping(uint16 => string) public  idToProperty;
     mapping(string => uint16) internal propertyToId;
     mapping(uint16 => Property) public properties;
-
-    constructor() Ownable() {
-    }
-
-    modifier mintDoesNotExist(string memory _address) {
-        require(propertyToId[_address] == 0);
-        _;
-    }
-    // set limit on property
-    function mintProperty(string memory _address) public mintDoesNotExist(_address) returns(string memory){
-
-        uint16 propertyToken = uint16(uint(keccak256(abi.encodePacked(_address))));
-        idToOwner[propertyToken] = msg.sender;
-        ownerToId[msg.sender] = propertyToken;
-        propertyToId[_address] = propertyToken;
-        emit Mint(msg.sender, propertyToken,"a new property has has been minted!");
-        return "You have minted your property, and are now the official Owner of this property!";
-    }
 
     enum State{
        Other,
@@ -46,19 +30,37 @@ contract realEstateTransaction is Ownable{
       address payable seller;    
       }
 
+    modifier mintDoesNotExist(string memory _address) {
+        require(propertyToId[_address] == 0);
+        _;
+    }
+    // set limit on property
+    function mintProperty(string calldata _address) public mintDoesNotExist(_address) returns(string memory){
+
+        uint16 propertyToken = uint16(uint(keccak256(abi.encodePacked(_address))));
+        idToOwner[propertyToken] = msg.sender;
+        ownerToId[msg.sender] = propertyToken;
+        propertyToId[_address] = propertyToken;
+        emit Mint(msg.sender, propertyToken,"a new property has has been minted!");
+        return "You have minted your property, and are now the official Owner of this property!";
+    }
+
+
     // fetch owner
     modifier isOwner (uint16 propertyToken) {
       require(idToOwner[propertyToken] == msg.sender, "is not the owner");
         _;
     }
 
-    modifier paidEnough(uint _price) { 
-    require(msg.value >= _price); 
+    modifier paidEnough(string memory _addressName) { 
+    uint16 propertyToken = propertyToId[_addressName];
+    require(msg.value >= properties[propertyToken].price); 
     _;
    }
 
-    modifier forSale(uint16 _propertyToken){
-    require((properties[_propertyToken].seller != address(0)) && (properties[_propertyToken].state == State.ForSale));
+    modifier forSale(string memory _addressName){
+    uint16 propertyToken = propertyToId[_addressName];
+    require((properties[propertyToken].seller != address(0)) && (properties[propertyToken].state == State.ForSale));
     _;
   }
 
@@ -68,7 +70,7 @@ contract realEstateTransaction is Ownable{
   }
 
   // test for ownership
-    function listPropertyForSale(string memory _addressName, uint _price) public returns(uint16)
+    function listPropertyForSale(string calldata _addressName, uint _price) public returns(uint16)
     {   
         uint16 propertyToken = ownerToId[msg.sender];
         require(idToOwner[propertyToken] == msg.sender, "is not the owner!");
@@ -92,14 +94,12 @@ contract realEstateTransaction is Ownable{
 
     }
   // change seller to owner, seller is inferred by the status
-  //test for transfer of funds
-    function buyProperty(uint16 propertyToken) public payable 
-    forSale(propertyToken) paidEnough(properties[propertyToken].price) returns(string memory){
-        properties[propertyToken].seller.transfer(properties[propertyToken].price);
+    function buyProperty(string memory _addressName) public payable 
+    forSale(_addressName) paidEnough(_addressName)  {
+        uint16 propertyToken = propertyToId[_addressName];
+        properties[propertyToken].seller.transfer(msg.value);
         properties[propertyToken].state = State.Sold;
         emit LogSold(properties[propertyToken].propertyName,propertyToken);
         updateStatus(propertyToken);
-        return "You have purchased this property!";
-
     }
 }
