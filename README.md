@@ -23,10 +23,3 @@ INSTRUCTION TO SET-UP:
 Latest Nodejs must be installed
 Once my repo is cloned, type npm install, this will install all my package depencencies from package.json
 Unit tests should be done through truffle and ganache on port 8545
-
-
-"former project idea: The aim of this application will be to decentralize real estate financing.
-The first step will be to provide credentials/loan request to a financing party to be approved for a specified loan amount.
-When financing, a smart contract will be produced with terms of the loan, lender(s) who agree to the terms. If multiple parties, there will be a consensus agreement process.
-Further thinking, this can be sent out to multiple parties for approval, and the loan amount can be syndicated. Buyers will then place an offer to the house/apartment with their preapproved offer. Appraisers could pick up a job from the website and be paid out a bounty amount. Maybe website could hosted on IPFS
-Questions to be considered in the long term, how will the system deal with default? How is this monetized? Who are the sellers that would accept this type of financing? What are all the laws to consider along the process? Would appraisers be required by the financies parties/government?"
