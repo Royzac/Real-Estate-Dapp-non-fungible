@@ -17,14 +17,15 @@ both a signed contract, and a deed for collateral or to place a lien upon. This 
 
 
 ## SECURTIY MEASURES:
-Access control design patterns using modifier and require functions
-Tx.Origin transaction authentication
+
+### Access control design patterns using modifier and require functions
+### Tx.Origin transaction authentication
 
 
 ## INSTRUCTIONS TO SET-UP:
 
-Latest Nodejs must be installed
-Once this repo is cloned, enter the following lines in the top-level directory.
+#### Latest Nodejs must be installed
+#### Once this repo is cloned, enter the following lines in the top-level directory.
 
 ``` 
 npm install
