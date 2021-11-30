@@ -3,14 +3,16 @@ import realEstateTransaction from '../abis/realEstateTransaction.json'
 import React, { Component } from 'react';
 import Web3 from 'web3';
 import logo from '../logo.png';
+import './App.css';
+
 
 class App extends Component {
 
     async componentWillMount() {
-      await this.loadBlockchainData(this.props.dispatch)
+      await this.loadBlockchainData()
     }
   
-    async loadBlockchainData(dispatch) {
+    async loadBlockchainData() {
       if(typeof window.ethereum!=='undefined'){
         const web3 = new Web3(window.ethereum)
         const netId = await web3.eth.net.getId()
@@ -21,7 +23,9 @@ class App extends Component {
           const balance = await web3.eth.getBalance(accounts[0])
           this.setState({account: accounts[0], balance: balance, web3: web3})
         } else {
-          window.alert('Please login with MetaMask')
+          await window.ethereum.enable()
+          window.location.reload()
+
         }
   
         //load contracts
@@ -31,6 +35,7 @@ class App extends Component {
         } catch (e) {
           console.log('Error', e)
           window.alert('Contract not deployed to the current network')
+
         }
   
       } else {
@@ -38,18 +43,17 @@ class App extends Component {
       }
     }
 
+
     async mintProperty(_address) {
       if(this.state.contract!=='undefined'){
         try{
           this.state.address = _address
           await this.state.contract.methods.mintProperty(_address).send({ from: this.state.account }).once('confirmation', (confirmation) => {
-          this.state.address = _address
           this.setState({ loading: false })
           window.location.reload()})
           console.log('You have now minted this address!')
         } catch (e) {
           console.log('Error, issue minting: ', e)
-          return `${_address} has already been claimed!`
         }
       }
     }
@@ -57,7 +61,7 @@ class App extends Component {
     async listPropertyForSale(_address,price) {
       if(this.state.contract!=='undefined'){
         try{
-          await this.state.contract.methods.listPropertyForSale(_address,price).send({ from: this.state.account }).once('confirmation', (confirmation) => {
+          await this.state.contract.methods.listPropertyForSale(_address,price).send({ from: this.state.account}).once('confirmation', (confirmation) => {
           this.setState({ loading: false })
           window.location.reload()})
           console.log('You have listed your property for sale!')
@@ -66,9 +70,22 @@ class App extends Component {
         }
       }
     }
+
+    async buyProperty(_address,price) {
+      if(this.state.contract!=='undefined'){
+        try{
+          await this.state.contract.methods.buyProperty(_address).send({ from: this.state.account, value: price }).once('confirmation', (confirmation) => {
+          this.setState({ loading: false })
+          window.location.reload()})
+          console.log('You have listed your property for sale!')
+        } catch (e) {
+          console.log('Error, buying property for sale: ', e)
+        }
+      }
+    }
   
 
-  
+      
     constructor(props) {
       super(props)
       this.state = {
@@ -102,7 +119,7 @@ class App extends Component {
             <div className="row">
               <main role="main" className="col-lg-12 d-flex text-center">
                 <div className="content mr-auto ml-auto">
-                <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
+                <Tabs pullright defaultActiveKey="profile" id="uncontrolled-tab-example" className='mb-3'> 
                   <Tab eventKey="Mint Property" title="Mint Property">
                     <div>
                     <br></br>
@@ -130,14 +147,14 @@ class App extends Component {
                       </form>
                     </div>
                   </Tab>
-                  <Tab eventKey="listPropertyForSale" title="List Property For Sale">
+                  <Tab eventKey="listPropertyForSale" title="List Property for Sale">
                   <div>
                   <br></br>
                     Would you like to list your property for sale?
                     <form onSubmit={(e) => {
                       e.preventDefault()
-                      // let price = this.salePrice
-                      let amount = Web3.utils.toWei('1', 'Ether') 
+                      let amount = this.salePrice
+                      amount =  amount * 10 **18 
                       let address = this.address
                       this.listPropertyForSale(address,amount)
                     }}>
@@ -162,6 +179,41 @@ class App extends Component {
                           required />
                       </div>
                       <button type='submit' className='btn btn-primary'>List Your Property for Sale! {this.state.address} </button>
+                    </form>
+
+                  </div>
+                </Tab>
+                <Tab eventKey="buyPropertyForSale" title="Buy a Property">
+                  <div>
+                  <br></br>
+                    Are you ready to buy?
+                    <form onSubmit={(e) => {
+                      e.preventDefault()
+                      let amount = this.purchasePrice * 10 **18 
+                      let address = this.address
+                      this.buyProperty(address,amount)
+                    }}>
+                    <div className='form-group mr-sm-2'>
+                      <br></br>
+                        <input
+                          id='address'
+                          type='text'
+                          ref={(address) => {this.address = address }}
+                          className="form-control form-control-md"
+                          placeholder="Listing address to purchase"
+                          required />
+                      </div>
+                      <div className='form-group mr-sm-2'>
+                      <br></br>
+                        <input
+                          id='purchasePrice'
+                          type='text'
+                          ref={(purchasePrice) => {this.purchasePrice = purchasePrice }}
+                          className="form-control form-control-md"
+                          placeholder='Purchase Price(in Eth)'
+                          required />
+                      </div>
+                      <button type='submit' className='btn btn-primary'>Buy a Property {this.state.address} </button>
                     </form>
 
                   </div>

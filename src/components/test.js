@@ -1,9 +1,10 @@
+import { Tabs, Tab } from 'react-bootstrap'
 import realEstateTransaction from '../abis/realEstateTransaction.json'
-import { React, Component} from 'react';
+import React, { Component } from 'react';
 import Web3 from 'web3';
-import Navbar from './NavBar'
-import logo from './logo.png';
-import { render } from 'react-dom';
+import logo from '../logo.png';
+import './App.css';
+
 
 class App extends Component {
 
@@ -11,7 +12,7 @@ class App extends Component {
     await this.loadWeb3()
     await this.loadBlockchainData()
     await this.detectAccountChange()
-  };
+  }
 
   async loadWeb3() {
     if (window.ethereum) {
@@ -24,163 +25,236 @@ class App extends Component {
     else {
       window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
     }
-  };
+  }
 
   async loadBlockchainData() {
     const web3 = window.web3
     // Load account
     const accounts = await web3.eth.getAccounts()
-    // Network ID
+    this.setState({ account: accounts[0] })
     const networkId = await web3.eth.net.getId()
-
-    const balance = await web3.eth.getBalance(accounts[0])
-    
-    this.setState({account: accounts[0], balance: balance, web3: web3 })
-    
     const networkData = realEstateTransaction.networks[networkId]
-
     if(networkData) {
-      // Assign contract
-      const contract = new web3.eth.Contract(realEstateTransaction.abi, networkData.address)
+      const contract = web3.eth.Contract(realEstateTransaction.abi, networkData.address)
       this.setState({ contract })
-      } else {
-      window.alert('smart contract not deployed to detected network.')
-    }};
+      const itemCount = await jaslist.methods.itemCount().call()
+      this.setState({ itemCount })
+      // Load products
+      this.setState({ loading: false})
+      // console.log(this.state.items)
+    } else {
+      window.alert('Jaslist contract not deployed to detected network.')
+    }
+  }
+npm 
+  detectAccountChange() {
+    const ethereum = window.ethereum
+    
+    if(ethereum) {
+      ethereum.on('accountsChanged', function (accounts) {
+        // this.setState({ loading: false})
+        window.location.reload()
+      })
 
-    detectAccountChange() {
-      const ethereum = window.ethereum
-      
-      if(ethereum) {
-        ethereum.on('accountsChanged', function (accounts) {
-          // this.setState({ loading: false})
-          window.location.reload()
-        })
-  
-        ethereum.on('chainChanged', () => {
-          window.location.reload()
-          this.loadBlockchainData()
-        })
-      }
-    };
-
-    constructor(props) {
-      super(props)
-        this.state = {
-          account: '',
-          propertyToken: null,
-          Balance: 0,
-          loading: true
-      }};
-
-    // this.mintProperty = this.mintProperty.bind(this)
-    // this.buyProperty = this.listPropertyForSale.bind(this)
-    // this.listProperty = this.listPropertyForSale.bind(this)
+      ethereum.on('chainChanged', () => {
+        window.location.reload()
+        this.loadBlockchainData()
+      })
+    }
+  }
 
 
-      mintProperty(_addressName) {
-        this.setState({ loading: true })
-        this.state.contract.methods.listProperty(_addressName).send({ from: this.state.account })
-        .once('confirmation', (confirmation) => {
+
+    async mintProperty(_address) {
+      if(this.state.contract!=='undefined'){
+        try{
+          this.state.address = _address
+          await this.state.contract.methods.mintProperty(_address).send({ from: this.state.account }).once('confirmation', (confirmation) => {
           this.setState({ loading: false })
-          window.location.reload()
-        })
-      }
-
-      listPropertyForSale(_addressName, price) {
-        this.setState({ loading: true })
-        this.state.contract.methods.listPropertyForSale(_addressName, price).send({ from: this.state.account })
-        .once('confirmation', (confirmation) => {
-          this.setState({ loading: false })
-          window.location.reload()
-        })
-      }
-    
-      buyProperty(_addressName, price) {
-        this.setState({ loading: true })
-        this.state.contract.methods.buyProperty(_addressName).send({ from: this.state.account, value: price })
-        .once('confirmation', (confirmation) => {
-          this.setState({ loading: false })
-          window.location.reload()
-        })
-      }
-
-    
-      render() {
-        let content
-        if(this.state.loading) {
-          content = <p id="loader" className="text-center">Loading...</p>
-        } else {
-          content = <Main
-            ethBalance={this.state.ethBalance}
-            tokenBalance={this.state.tokenBalance}
-            buyTokens={this.buyTokens}
-            sellTokens={this.sellTokens}
-          />
-        }
-    
-        return (
-          <div>
-            <Navbar account={this.state.account} />
-            <div className="container-fluid mt-5">
-              <div className="row">
-                <main role="main" className="col-lg-12 ml-auto mr-auto" style={{ maxWidth: '600px' }}>
-                  <div className="content mr-auto ml-auto">
-                    <a
-                      href="http://www.dappuniversity.com/bootcamp"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                    </a>
-    
-                    {content}
-    
-                  </div>
-                </main>
-              </div>
+          window.location.reload()})
+          console.log('You have now minted this address!')
+        } catch (e) {
+          console.log('Error, issue minting: ', e)
+          return (
+            <div>
+                <h1>`${_address} has already been claimed!` </h1>
             </div>
-          </div>
         );
+
+        }
       }
     }
-    
-    
-    
-    
-    
-export default App;
-    
-    
-    
-    
-    
-    
-    
-<Tab eventKey="listPropertyForSale" title="List Property For Sale">
+
+    async listPropertyForSale(_address,price) {
+      if(this.state.contract!=='undefined'){
+        try{
+          await this.state.contract.methods.listPropertyForSale(_address,price).send({ from: this.state.account}).once('confirmation', (confirmation) => {
+          this.setState({ loading: false })
+          window.location.reload()})
+          console.log('You have listed your property for sale!')
+        } catch (e) {
+          console.log('Error, listing property for sale: ', e)
+        }
+      }
+    }
+
+    async buyProperty(_address,price) {
+      if(this.state.contract!=='undefined'){
+        try{
+          await this.state.contract.methods.buyProperty(_address).send({ from: this.state.account, value: price }).once('confirmation', (confirmation) => {
+          this.setState({ loading: false })
+          window.location.reload()})
+          console.log('You have listed your property for sale!')
+        } catch (e) {
+          console.log('Error, buying property for sale: ', e)
+        }
+      }
+    }
+  
+
+      
+    constructor(props) {
+      super(props)
+      this.state = {
+        web3: 'undefined',
+        account: '',
+        contract: null,
+        balance: 0,
+        address: ''
+      }
+    }
+  
+    render() {
+      return (
+        <div className='text-monospace'>
+          <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+            <a
+              className="navbar-brand col-sm-3 col-md-2 mr-0"
+              href="https://github.com/Royzac/blockchain-developer-bootcamp-final-project"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+          <img src={logo} className="App-logo" alt="logo" height="32"/>
+          </a>
+          </nav>
+          <div className="container-fluid mt-5 text-center">
+          <br></br>
+            <h1>Welcome to Blockify! 
+                We provide an expedient and transparent solution for your next real estate transactions!</h1>
+            <h2>This is your current account address {this.state.account}</h2>
+            <br></br>
+            <div className="row">
+              <main role="main" className="col-lg-12 d-flex text-center">
+                <div className="content mr-auto ml-auto">
+                <Tabs pullright defaultActiveKey="profile" id="uncontrolled-tab-example" className='mb-3'> 
+                  <Tab eventKey="Mint Property" title="Mint Property">
+                    <div>
+                    <br></br>
+                      Would you like to mint your property?
+                      <br></br>
+                      <br></br>
+                      (Only one address is possible at the time)
+                      <br></br>
+                      <form onSubmit={(e) => {
+                        e.preventDefault()
+                        let address = this.mint
+                        this.mintProperty(address)
+                      }}>
+                        <div className='form-group mr-sm-2'>
+                        <br></br>
+                          <input
+                            id='mintProperty'
+                            type='string'
+                            ref={(input) => { this.mint = input }}
+                            className="form-control form-control-md"
+                            placeholder='address...'
+                            required />
+                        </div>
+                        <button type='submit' className='btn btn-primary'>Mint Address</button>
+                      </form>
+                    </div>
+                  </Tab>
+                  <Tab eventKey="listPropertyForSale" title="List Property for Sale">
                   <div>
                   <br></br>
                     Would you like to list your property for sale?
                     <form onSubmit={(e) => {
                       e.preventDefault()
                       let amount = this.salePrice
+                      amount =  amount * 10 **18 
                       let address = this.address
-                      amount = amount * 10**18 //convert to wei
                       this.listPropertyForSale(address,amount)
                     }}>
                       <div className='form-group mr-sm-2'>
                       <br></br>
                         <input
-                          id='salePrice'
-                          step="0.01"
-                          type='number'
-                          ref={(address,salePrice) => { this.salePrice = salePrice, this.address = address }}
+                          id='address'
+                          type='text'
+                          ref={(address) => {this.address = address }}
                           className="form-control form-control-md"
-                          placeholder='amount...'
+                          placeholder='Address Name'
                           required />
                       </div>
-                      <button type='submit' className='btn btn-primary'>List your Property for Sale! {this.state.address} </button>
+                      <div className='form-group mr-sm-2'>
+                      <br></br>
+                        <input
+                          id='salePrice'
+                          type='text'
+                          ref={(salePrice) => {this.salePrice = salePrice }}
+                          className="form-control form-control-md"
+                          placeholder='Listing Price(in Eth)'
+                          required />
+                      </div>
+                      <button type='submit' className='btn btn-primary'>List Your Property for Sale! {this.state.address} </button>
                     </form>
 
                   </div>
                 </Tab>
+                <Tab eventKey="buyPropertyForSale" title="Buy a Property">
+                  <div>
+                  <br></br>
+                    Are you ready to buy?
+                    <form onSubmit={(e) => {
+                      e.preventDefault()
+                      let amount = this.purchasePrice * 10 **18 
+                      let address = this.address
+                      this.buyProperty(address,amount)
+                    }}>
+                    <div className='form-group mr-sm-2'>
+                      <br></br>
+                        <input
+                          id='address'
+                          type='text'
+                          ref={(address) => {this.address = address }}
+                          className="form-control form-control-md"
+                          placeholder="Listing address to purchase"
+                          required />
+                      </div>
+                      <div className='form-group mr-sm-2'>
+                      <br></br>
+                        <input
+                          id='purchasePrice'
+                          type='text'
+                          ref={(purchasePrice) => {this.purchasePrice = purchasePrice }}
+                          className="form-control form-control-md"
+                          placeholder='Purchase Price(in Eth)'
+                          required />
+                      </div>
+                      <button type='submit' className='btn btn-primary'>Buy a Property {this.state.address} </button>
+                    </form>
 
-let purchase = await instance.buyProperty("50 King St.", { from: buyer, value: web3.utils.toWei('2', 'Ether') });
+                  </div>
+                </Tab>
+                </Tabs>
+                </div>
+              </main>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  }
+  
+  export default App;
+
+  
