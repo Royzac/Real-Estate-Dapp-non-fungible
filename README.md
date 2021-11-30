@@ -12,8 +12,8 @@ both a signed contract, and a deed for collateral or to place a lien upon. This 
 
 ## DESIGN PATTERNS:
 
-Inheritance(ownable)
-Gas optimization through lower uint size and use of calldata over in-memory where appropiate
+### Inheritance(ownable).
+### Gas optimization through lower uint size and use of calldata over in-memory where appropiate
 
 
 ## SECURTIY MEASURES:
