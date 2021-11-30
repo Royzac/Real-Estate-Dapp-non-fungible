@@ -23,6 +23,7 @@ contract realEstateTransaction is Ownable{
        Sold
     }
 
+
     struct Property{
       string propertyName;
       uint price;
@@ -31,7 +32,7 @@ contract realEstateTransaction is Ownable{
       }
 
     modifier mintDoesNotExist(string memory _address) {
-        require(propertyToId[_address] == 0);
+        require(propertyToId[_address] == 0, "this address has already been claimed!");
         _;
     }
     // set limit on property
