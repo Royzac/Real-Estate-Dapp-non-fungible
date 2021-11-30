@@ -21,5 +21,13 @@ Tx.Origin transaction authentication
 INSTRUCTION TO SET-UP:
 
 Latest Nodejs must be installed
-Once my repo is cloned, type npm install, this will install all my package depencencies from package.json
-Unit tests should be done through truffle and ganache on port 8545
+Once this repo is cloned, enter the following lines in the top-level directory.
+
+``` 
+npm install
+
+truffle migrate
+
+npm start
+
+```
