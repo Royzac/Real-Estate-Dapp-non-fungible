@@ -1,6 +1,6 @@
 #Deployed on Fleek: Here's the address...
 
-#PROBLEM:
+# PROBLEM:
 
 Real estate transaction are heavily dependent upon opaque legacy processes that expose the transaction to more risk and reduce expendiancy.
 The solution is to provide a disintermidiate process where all terms can be fulfilled throught the blockchain.
