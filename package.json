@@ -4,7 +4,7 @@
   "author": "Zachary Royals",
   "private": true,
   "description": "Dapp Project for ConsenSys Bootcamp",
-  "homepage": "https://github.com/Royzac/blockchain-developer-bootcamp-final-project/",
+  "homepage": ".",
   "main": "index.js",
   "scripts": {
     "app": "node index.js",
