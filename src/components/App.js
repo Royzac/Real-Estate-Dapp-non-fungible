@@ -8,6 +8,22 @@ import './App.css';
 
 class App extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      web3: 'undefined',
+      account: '',
+      contract: null,
+      balance: 0,
+      address: ''
+    }
+    this.mintProperty = this.mintProperty.bind(this)
+    this.listPropertyForSale = this.listPropertyForSale.bind(this)
+    this.buyProperty = this.buyProperty.bind(this)
+
+  }  
+
+
   async componentWillMount() {
     await this.loadWeb3()
     await this.loadBlockchainData()
@@ -78,6 +94,8 @@ class App extends Component {
       try{
         localStorage.setItem("address", _address)
         await this.state.contract.methods.mintProperty(_address).send({ from: this.state.account }).once('confirmation', (confirmation) => {
+        this.setState({address: _address})
+        window.alert('Transaction successful.')
         window.location.reload()})
       } catch (e) {
         console.log('Error, issue minting: ', e)
@@ -89,7 +107,7 @@ class App extends Component {
     if(this.state.contract!=='undefined'){
       try{
         await this.state.contract.methods.listPropertyForSale(_address,price).send({ from: this.state.account}).once('confirmation', (confirmation) => {
-        this.setState({ loading: false })
+        window.alert('Transaction successful.')
         window.location.reload()})
       } catch (e) {
         console.log('Error, listing property for sale: ', e)
@@ -101,7 +119,7 @@ class App extends Component {
     if(this.state.contract!=='undefined'){
       try{
         await this.state.contract.methods.buyProperty(_address).send({ from: this.state.account}).once('confirmation', (confirmation) => {
-        this.setState({ loading: false })
+        window.alert('Transaction successful.')
         window.location.reload()})
       } catch (e) {
         console.log('Error, buying property for sale: ', e)
@@ -109,16 +127,7 @@ class App extends Component {
     }
   }
      
-    constructor(props) {
-      super(props)
-      this.state = {
-        web3: 'undefined',
-        account: '',
-        contract: null,
-        balance: 0,
-        address: ''
-      }
-    }
+
   
     render() {
       return (
@@ -173,7 +182,7 @@ class App extends Component {
                   <Tab eventKey="listPropertyForSale" title="List Property for Sale">
                   <div>
                   <br></br>
-                    Would you like to list your property for sale? 
+                    Would you like to list your property for sale? {this.state.address}
                     <form onSubmit={(e) => {
                       e.preventDefault()
 
@@ -254,5 +263,6 @@ class App extends Component {
   }
   
   export default App;
+
 
   
