@@ -47,7 +47,8 @@ class App extends Component {
   async loadBlockchainData() {
     const web3 = window.web3
     const netId = await web3.eth.net.getId()
-
+    
+    // connect to contract
     try {
       const reTransaction = new web3.eth.Contract(realEstateTransaction.abi, realEstateTransaction.networks[netId].address)
       this.setState({contract: reTransaction})
@@ -57,7 +58,7 @@ class App extends Component {
 
     }
 
-    // Load Wallet Account Data
+    // Load wallet account data
     const accounts = await web3.eth.getAccounts()
     if(typeof accounts[0] !=='undefined'){
       const balance = await web3.eth.getBalance(accounts[0])
