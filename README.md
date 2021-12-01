@@ -15,7 +15,9 @@ both a signed contract, and a deed for collateral or to place a lien upon. This 
 
 ## FILE STRUCTURE
 
-Root directory consists of all major directories(such as Test and Src) and config files like truffle-config.js
+Root directory consists of all major directories(such as Test and Src) 
+and config files like truffle-config.js
+
 Src folder includes relevant abis,components, and contracts
 
 
