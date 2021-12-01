@@ -6,6 +6,8 @@ Frontend URL:https://blockchain-developer-bootcamp-final-project-pvapoi8u8-royza
 
 My Account Address: 0xc9Ec57e269ace5C1140Fbb22dbB4386f4080F694
 
+Video Tour: https://www.loom.com/share/9d43280e83c9466fb28a4e00f0515bb4
+
 # PROBLEM and SOLUTION:
 
 Real estate transaction are heavily dependent upon opaque legacy processes that expose the transaction to more risk and reduce expendiancy.
