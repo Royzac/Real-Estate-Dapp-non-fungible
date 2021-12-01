@@ -27,6 +27,40 @@ and config files like truffle-config.js
 
 Src folder includes relevant abis,components, and contracts
 
+.
+├── README.md
+├── Testnet_abis
+│   ├── Context.json
+│   ├── Migrations.json
+│   ├── Ownable.json
+│   └── realEstateTransaction.json
+├── build
+│   └── contracts
+├── deployed_address.txt
+├── direct_tree.txt
+├── migrations
+│   ├── 1_initial_migration.js
+│   └── 2_realEstateTransaction.js
+├── package-lock.json
+├── package.json
+├── public
+│   ├── favicon.ico
+│   ├── index.html
+│   ├── logo192.png
+│   ├── logo512.png
+│   ├── manifest.json
+│   └── robots.txt
+├── src
+│   ├── abis
+│   ├── components
+│   ├── contracts
+│   ├── index.js
+│   └── logo.png
+├── test
+│   └── test_realEstateTransaction.js
+└── truffle-config.js
+
+10 directories, 21 files
 
 
 
