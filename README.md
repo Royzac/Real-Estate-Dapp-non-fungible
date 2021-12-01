@@ -1,5 +1,7 @@
-### Smart Contract deployed on Ropsten Testnet, 
+### Smart Contract deployed on Ropsten Testnet
+
 Contract address: 0x8D692A4866537618f51587C3530fBc0a50971799 
+
 Frontend url:https://blockchain-developer-bootcamp-final-project-royzac.vercel.app/
 
 # PROBLEM and SOLUTION:
