@@ -26,7 +26,7 @@ both a signed contract, and a deed for collateral or to place a lien upon. This 
 
 #### Latest Nodejs must be installed
 #### Once this repo is cloned, enter the following lines in the top-level directory.
-### truffle test to run tests on the smart contract, and npm start to run the frontend application.
+#### truffle test to run tests on the smart contract, and npm start to run the frontend application.
 
 ``` 
 npm install
