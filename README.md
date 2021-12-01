@@ -2,7 +2,7 @@
 
 Contract address: 0x8D692A4866537618f51587C3530fBc0a50971799 
 
-Frontend url:https://blockchain-developer-bootcamp-final-project-royzac.vercel.app/
+Frontend url:https://blockchain-developer-bootcamp-final-project-pvapoi8u8-royzac.vercel.app/
 
 # PROBLEM and SOLUTION:
 
