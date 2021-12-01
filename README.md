@@ -25,16 +25,16 @@ Src folder includes relevant abis,components, and contracts
 
 ## DESIGN PATTERNS:
 
-### Inheritance(ownable).
-### Gas optimization through lower uint size and use of calldata over in-memory where appropiate
+#### Inheritance(ownable).
+#### Gas optimization through lower uint size and use of calldata over in-memory where appropiate
 
 
 
 
 ## SECURTIY MEASURES:
 
-### Access control design patterns using modifier and require functions
-### Tx.Origin transaction authentication
+#### Access control design patterns using modifier and require functions
+#### Tx.Origin transaction authentication
 
 
 
