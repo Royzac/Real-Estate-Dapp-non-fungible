@@ -93,7 +93,6 @@ class App extends Component {
   async mintProperty(_address) {
     if(this.state.contract!=='undefined'){
       try{
-        localStorage.setItem("address", _address)
         await this.state.contract.methods.mintProperty(_address).send({ from: this.state.account }).once('confirmation', (confirmation) => {
         this.setState({address: _address})
         window.alert('Transaction successful.')
