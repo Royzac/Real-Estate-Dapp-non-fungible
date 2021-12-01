@@ -10,10 +10,13 @@ both a signed contract, and a deed for collateral or to place a lien upon. This 
 
 
 
+
 ## DESIGN PATTERNS:
 
 ### Inheritance(ownable).
 ### Gas optimization through lower uint size and use of calldata over in-memory where appropiate
+
+
 
 
 ## SECURTIY MEASURES:
@@ -22,7 +25,10 @@ both a signed contract, and a deed for collateral or to place a lien upon. This 
 ### Tx.Origin transaction authentication
 
 
+
+
 ## INSTRUCTIONS TO SET-UP:
+
 
 #### Latest Nodejs must be installed
 #### Once this repo is cloned, enter the following lines in the top-level directory.
