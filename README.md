@@ -1,8 +1,10 @@
 ### Smart Contract deployed on Ropsten Testnet
 
-Contract address: 0x8D692A4866537618f51587C3530fBc0a50971799 
+Ropsten Contract Address: 0x8D692A4866537618f51587C3530fBc0a50971799 
 
-Frontend url:https://blockchain-developer-bootcamp-final-project-pvapoi8u8-royzac.vercel.app/
+Frontend URL:https://blockchain-developer-bootcamp-final-project-pvapoi8u8-royzac.vercel.app/
+
+My Account Address: 0xc9Ec57e269ace5C1140Fbb22dbB4386f4080F694
 
 # PROBLEM and SOLUTION:
 
