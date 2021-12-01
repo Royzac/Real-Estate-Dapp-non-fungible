@@ -49,7 +49,9 @@ Src folder includes relevant abis,components, and contracts
 ``` 
 npm install
 
-truffle migrate
+npm install ganache-cli
+
+truffle migrate --reset
 
 truffle test
 
