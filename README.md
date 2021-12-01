@@ -32,6 +32,8 @@ npm install
 
 truffle migrate
 
+truffle test
+
 npm start
 
 ```
