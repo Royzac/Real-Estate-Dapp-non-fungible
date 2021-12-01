@@ -13,7 +13,7 @@ I had originally considered a real estate defi application(see below), but after
 both a signed contract, and a deed for collateral or to place a lien upon. This is critical and helps to reduce substantial risk for lenders. I think this a perequisite to allowing real estate defi to undercut prevailing interest rates in conjunction with a fractional lending system.
 
 
-## FILE STRUCTURE
+## DIRECTORY STRUCTURE
 
 Root directory consists of all major directories(such as Test and Src) 
 and config files like truffle-config.js
