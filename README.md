@@ -9,6 +9,8 @@ I had originally considered a real estate defi application(see below), but after
 both a signed contract, and a deed for collateral or to place a lien upon. This is critical and helps to reduce substantial risk for lenders. I think this a perequisite to allowing real estate defi to undercut prevailing interest rates in conjunction with a fractional lending system.
 
 
+## File Structure
+
 
 
 ## DESIGN PATTERNS:
