@@ -27,6 +27,7 @@ and config files like truffle-config.js
 
 Src folder includes relevant abis,components, and contracts
 
+```bash
 .
 ├── README.md
 ├── Testnet_abis
@@ -59,6 +60,7 @@ Src folder includes relevant abis,components, and contracts
 ├── test
 │   └── test_realEstateTransaction.js
 └── truffle-config.js
+```
 
 10 directories, 21 files
 
