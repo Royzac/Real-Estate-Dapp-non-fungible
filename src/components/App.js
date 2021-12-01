@@ -94,7 +94,6 @@ class App extends Component {
     if(this.state.contract!=='undefined'){
       try{
         await this.state.contract.methods.mintProperty(_address).send({ from: this.state.account }).once('confirmation', (confirmation) => {
-        this.setState({address: _address})
         window.alert('Transaction successful.')
         window.location.reload()})
       } catch (e) {
