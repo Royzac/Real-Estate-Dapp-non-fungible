@@ -8,84 +8,107 @@ import './App.css';
 
 class App extends Component {
 
-    async componentWillMount() {
-      await this.loadBlockchainData()
+  async componentWillMount() {
+    await this.loadWeb3()
+    await this.loadBlockchainData()
+    await this.detectAccountChange()
+  }
+
+  async loadWeb3() {
+    // Ensure Wallet is awailable
+    if (window.ethereum) {
+      window.web3 = new Web3(window.ethereum)
+      await window.ethereum.enable()
     }
-  
-    async loadBlockchainData() {
-      if(typeof window.ethereum!=='undefined'){
-        const web3 = new Web3(window.ethereum)
-        const netId = await web3.eth.net.getId()
-        const accounts = await web3.eth.getAccounts()
-  
-        //load balance
-        if(typeof accounts[0] !=='undefined'){
-          const balance = await web3.eth.getBalance(accounts[0])
-          this.setState({account: accounts[0], balance: balance, web3: web3})
-        } else {
-          await window.ethereum.enable()
-          window.location.reload()
+    else if (window.web3) {
+      window.web3 = new Web3(window.web3.currentProvider)
+    }
+    else {
+      window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
+    }
+  }
 
-        }
-  
-        //load contracts
-        try {
-          const reTransaction = new web3.eth.Contract(realEstateTransaction.abi, realEstateTransaction.networks[netId].address)
-          this.setState({contract: reTransaction})
-        } catch (e) {
-          console.log('Error', e)
-          window.alert('Contract not deployed to the current network')
+  async loadBlockchainData() {
+    const web3 = window.web3
+    const netId = await web3.eth.net.getId()
 
-        }
-  
-      } else {
-        window.alert('Please install MetaMask')
+    try {
+      const reTransaction = new web3.eth.Contract(realEstateTransaction.abi, realEstateTransaction.networks[netId].address)
+      this.setState({contract: reTransaction})
+    } catch (e) {
+      console.log('Error', e)
+      window.alert('Contract not detected on the network')
+
+    }
+
+    // Load Wallet Account Data
+    const accounts = await web3.eth.getAccounts()
+    if(typeof accounts[0] !=='undefined'){
+      const balance = await web3.eth.getBalance(accounts[0])
+      this.setState({account: accounts[0], balance: balance, web3: web3})
+    } else {
+      await window.ethereum.enable()
+      window.location.reload()
+
+    // Connect to smart contract
+
+  }
+
+  }
+ 
+  detectAccountChange() {
+    const ethereum = window.ethereum
+    
+    if(ethereum) {
+      ethereum.on('accountsChanged', function (accounts) {
+        window.location.reload()
+      })
+
+      ethereum.on('chainChanged', () => {
+        window.location.reload()
+
+      })
+    }
+  }
+
+
+
+  async mintProperty(_address) {
+    if(this.state.contract!=='undefined'){
+      try{
+        localStorage.setItem("address", _address)
+        await this.state.contract.methods.mintProperty(_address).send({ from: this.state.account }).once('confirmation', (confirmation) => {
+        window.location.reload()})
+      } catch (e) {
+        console.log('Error, issue minting: ', e)
       }
     }
+  }
 
-
-    async mintProperty(_address) {
-      if(this.state.contract!=='undefined'){
-        try{
-          this.state.address = _address
-          await this.state.contract.methods.mintProperty(_address).send({ from: this.state.account }).once('confirmation', (confirmation) => {
-          this.setState({ loading: false })
-          window.location.reload()})
-          console.log('You have now minted this address!')
-        } catch (e) {
-          console.log('Error, issue minting: ', e)
-        }
+  async listPropertyForSale(_address,price) {
+    if(this.state.contract!=='undefined'){
+      try{
+        await this.state.contract.methods.listPropertyForSale(_address,price).send({ from: this.state.account}).once('confirmation', (confirmation) => {
+        this.setState({ loading: false })
+        window.location.reload()})
+      } catch (e) {
+        console.log('Error, listing property for sale: ', e)
       }
     }
+  }
 
-    async listPropertyForSale(_address,price) {
-      if(this.state.contract!=='undefined'){
-        try{
-          await this.state.contract.methods.listPropertyForSale(_address,price).send({ from: this.state.account}).once('confirmation', (confirmation) => {
-          this.setState({ loading: false })
-          window.location.reload()})
-          console.log('You have listed your property for sale!')
-        } catch (e) {
-          console.log('Error, listing property for sale: ', e)
-        }
+  async buyProperty(_address,price) {
+    if(this.state.contract!=='undefined'){
+      try{
+        await this.state.contract.methods.buyProperty(_address).send({ from: this.state.account}).once('confirmation', (confirmation) => {
+        this.setState({ loading: false })
+        window.location.reload()})
+      } catch (e) {
+        console.log('Error, buying property for sale: ', e)
       }
     }
-
-    async buyProperty(_address,price) {
-      if(this.state.contract!=='undefined'){
-        try{
-          await this.state.contract.methods.buyProperty(_address).send({ from: this.state.account, value: price }).once('confirmation', (confirmation) => {
-          this.setState({ loading: false })
-          window.location.reload()})
-          console.log('You have listed your property for sale!')
-        } catch (e) {
-          console.log('Error, buying property for sale: ', e)
-        }
-      }
-    }
-  
-
-      
+  }
+     
     constructor(props) {
       super(props)
       this.state = {
@@ -119,7 +142,7 @@ class App extends Component {
             <div className="row">
               <main role="main" className="col-lg-12 d-flex text-center">
                 <div className="content mr-auto ml-auto">
-                <Tabs pullright defaultActiveKey="profile" id="uncontrolled-tab-example" className='mb-3'> 
+                <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example" className='mb-3'> 
                   <Tab eventKey="Mint Property" title="Mint Property">
                     <div>
                     <br></br>
@@ -150,13 +173,13 @@ class App extends Component {
                   <Tab eventKey="listPropertyForSale" title="List Property for Sale">
                   <div>
                   <br></br>
-                    Would you like to list your property for sale?
+                    Would you like to list your property for sale? 
                     <form onSubmit={(e) => {
                       e.preventDefault()
-                      let amount = this.salePrice
-                      amount =  amount * 10 **18 
-                      let address = this.address
-                      this.listPropertyForSale(address,amount)
+
+                      const address = this.address
+                      const price = window.web3.utils.toWei(this.salePrice.value.toString(), 'Ether')
+                      this.listPropertyForSale(address,price)
                     }}>
                       <div className='form-group mr-sm-2'>
                       <br></br>
@@ -178,7 +201,7 @@ class App extends Component {
                           placeholder='Listing Price(in Eth)'
                           required />
                       </div>
-                      <button type='submit' className='btn btn-primary'>List Your Property for Sale! {this.state.address} </button>
+                      <button type='submit' className='btn btn-primary'>List Your Property for Sale! </button>
                     </form>
 
                   </div>
@@ -189,9 +212,11 @@ class App extends Component {
                     Are you ready to buy?
                     <form onSubmit={(e) => {
                       e.preventDefault()
-                      let amount = this.purchasePrice * 10 **18 
+
                       let address = this.address
-                      this.buyProperty(address,amount)
+                      const price = window.web3.utils.toWei(this.purchasePrice.value.toString(), 'Ether')
+
+                      this.buyProperty(address,price)
                     }}>
                     <div className='form-group mr-sm-2'>
                       <br></br>
