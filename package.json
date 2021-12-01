@@ -4,7 +4,6 @@
   "author": "Zachary Royals",
   "private": true,
   "description": "Dapp Project for ConsenSys Bootcamp",
-  "homepage": ".",
   "main": "index.js",
   "scripts": {
     "app": "node index.js",
