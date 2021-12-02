@@ -39,7 +39,7 @@ contract realEstateTransaction is Ownable{
         require(propertyToId[_address] == 0, "this address has already been claimed!");
         _;
     }
-    // set limit on property
+
     function mintProperty(string calldata _address) public mintDoesNotExist(_address) returns(string memory){
 
         uint16 propertyToken = uint16(uint(keccak256(abi.encodePacked(_address))));
@@ -51,7 +51,6 @@ contract realEstateTransaction is Ownable{
     }
 
 
-    // fetch owner
     modifier isOwner (uint16 propertyToken) {
       require(idToOwner[propertyToken] == msg.sender, "is not the owner");
         _;
@@ -74,7 +73,7 @@ contract realEstateTransaction is Ownable{
   _;
   }
 
-  // test for ownership
+  
     function listPropertyForSale(string calldata _addressName, uint _price) public returns(uint16)
     {   
         uint16 propertyToken = ownerToId[msg.sender];
@@ -98,7 +97,7 @@ contract realEstateTransaction is Ownable{
         emit NewOwner(propertyToken,properties[propertyToken].seller,"The property has a new owner!");
 
     }
-  // change seller to owner, seller is inferred by the status
+
     function buyProperty(string memory _addressName) public payable 
     forSale(_addressName) paidEnough(_addressName)  {
         uint16 propertyToken = propertyToId[_addressName];
