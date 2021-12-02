@@ -1,6 +1,10 @@
 pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+/// @title Blockify, a contract for real estate transaction
+/// @author Zachary Royals
+/// @notice For now, this contract just make simple transaction, transferring a property token from one owner to the next.
+
 contract realEstateTransaction is Ownable{
     constructor() Ownable() {
     }
