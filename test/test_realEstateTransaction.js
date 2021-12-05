@@ -5,7 +5,9 @@ const { assert } = require("chai");
 
 contract("realEstateTransaction", (accounts) => {
     const [seller, buyer] = accounts;
+        
         let instance;
+
         before(async() => {
             instance = await realEstateTransaction.deployed();
         });
