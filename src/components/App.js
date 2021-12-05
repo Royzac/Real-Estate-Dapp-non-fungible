@@ -15,7 +15,7 @@ class App extends Component {
       account: '',
       contract: null,
       balance: 0,
-      address: ''
+      addressName: ''
     }
     this.mintProperty = this.mintProperty.bind(this)
     this.listPropertyForSale = this.listPropertyForSale.bind(this)
@@ -67,8 +67,6 @@ class App extends Component {
       await window.ethereum.enable()
       window.location.reload()
 
-    // Connect to smart contract
-
   }
 
   }
@@ -91,11 +89,12 @@ class App extends Component {
 
 
   async mintProperty(_address) {
-    if(this.state.contract!=='undefined'){
+    if(this.state.contract){
       try{
         await this.state.contract.methods.mintProperty(_address).send({ from: this.state.account }).once('confirmation', (confirmation) => {
         window.alert('Transaction successful.')
-        window.location.reload()})
+        this.setState({addressName: _address})
+        })
       } catch (e) {
         console.log('Error, issue minting: ', e)
       }
@@ -103,11 +102,11 @@ class App extends Component {
   }
 
   async listPropertyForSale(_address,price) {
-    if(this.state.contract!=='undefined'){
+    if(this.state.contract){
       try{
         await this.state.contract.methods.listPropertyForSale(_address,price).send({ from: this.state.account}).once('confirmation', (confirmation) => {
-        window.alert('Transaction successful.')
-        window.location.reload()})
+        window.alert('Your property has been listed for sale.')
+       })
       } catch (e) {
         console.log('Error, listing property for sale: ', e)
       }
@@ -115,11 +114,11 @@ class App extends Component {
   }
 
   async buyProperty(_address,price) {
-    if(this.state.contract!=='undefined'){
+    if(this.state.contract){
       try{
         await this.state.contract.methods.buyProperty(_address).send({ from: this.state.account}).once('confirmation', (confirmation) => {
-        window.alert('Transaction successful.')
-        window.location.reload()})
+        window.alert(`You have purchased ${_address}`)
+        })
       } catch (e) {
         console.log('Error, buying property for sale: ', e)
       }
@@ -138,7 +137,7 @@ class App extends Component {
               target="_blank"
               rel="noopener noreferrer"
             >
-          <img src={logo} className="App-logo" alt="logo" height="32"/>
+          <img src={logo} className="App-logo" alt="logo" height="360"/>
           </a>
           </nav>
           <div className="container-fluid mt-5 text-center">
@@ -155,9 +154,6 @@ class App extends Component {
                     <div>
                     <br></br>
                       Would you like to mint your property?
-                      <br></br>
-                      <br></br>
-                      (Only one address is possible at the time)
                       <br></br>
                       <form onSubmit={(e) => {
                         e.preventDefault()
@@ -181,7 +177,7 @@ class App extends Component {
                   <Tab eventKey="listPropertyForSale" title="List Property for Sale">
                   <div>
                   <br></br>
-                    Would you like to list your property for sale? {this.state.address}
+                   Would you like to list <b>{this.state.addressName.value  ? this.state.addressName.value : null}</b> a property for sale.
                     <form onSubmit={(e) => {
                       e.preventDefault()
 
@@ -246,7 +242,7 @@ class App extends Component {
                           placeholder='Purchase Price(in Eth)'
                           required />
                       </div>
-                      <button type='submit' className='btn btn-primary'>Buy a Property {this.state.address} </button>
+                      <button type='submit' className='btn btn-primary'>Buy a Property</button>
                     </form>
 
                   </div>
@@ -262,6 +258,9 @@ class App extends Component {
   }
   
   export default App;
+
+
+  
 
 
   

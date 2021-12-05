@@ -5,6 +5,7 @@ const { assert } = require("chai");
 
 contract("realEstateTransaction", (accounts) => {
     const [seller, buyer] = accounts;
+        let instance;
         before(async() => {
             instance = await realEstateTransaction.deployed();
         });
@@ -25,6 +26,7 @@ contract("realEstateTransaction", (accounts) => {
 
     // })
     context("with the one-step transfer scenario", async () => {
+        let listedProperty;
         before(async() => {
             listedProperty = await instance.listPropertyForSale("50 King St.", web3.utils.toWei('1', 'Ether'), { from: seller });   
         });

@@ -51,8 +51,8 @@ contract realEstateTransaction is Ownable{
     }
 
 
-    modifier isOwner (uint16 propertyToken) {
-      require(idToOwner[propertyToken] == msg.sender, "is not the owner");
+    modifier isOwner (uint16 _propertyToken) {
+      require(idToOwner[_propertyToken] == msg.sender, "is not the owner");
         _;
     }
 
@@ -90,11 +90,11 @@ contract realEstateTransaction is Ownable{
         return propertyToken;
     }
 
-    function updateStatus(uint16 propertyToken) internal{
-        idToOwner[propertyToken] = msg.sender;
-        properties[propertyToken].seller = payable(msg.sender);
-        properties[propertyToken].state = State.Other;
-        emit NewOwner(propertyToken,properties[propertyToken].seller,"The property has a new owner!");
+    function updateStatus(uint16 _propertyToken) internal{
+        idToOwner[_propertyToken] = msg.sender;
+        properties[_propertyToken].seller = payable(msg.sender);
+        properties[_propertyToken].state = State.Other;
+        emit NewOwner(_propertyToken,properties[_propertyToken].seller,"The property has a new owner!");
 
     }
 
