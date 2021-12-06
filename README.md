@@ -86,7 +86,7 @@ Src folder includes relevant abis,components, and contracts
 
 
 #### Latest Nodejs must be installed
-#### Once this repo is cloned, enter the following lines in the top-level directory.
+#### Once this repo is cloned, enter the following lines in the top-level/root directory.
 #### truffle test to run tests on the smart contract, and npm start to run the frontend application.
 
 ``` 
