@@ -118,3 +118,5 @@ npm start
 
 ##### Add comments throughout contract
 
+##### Extend testing
+
