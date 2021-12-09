@@ -105,10 +105,16 @@ npm start
 
 
 ### Additional Items to Work On
-Upgrade Contract to ERC721
-Provide Conversion Ratio to Transaction using an exchange API
-Upgrade Frontend Interface with Inventory of properties for sale
-Maybe create Auction system?
-Redesign Ownership/Mint Authentication Process. Perhaps consider Oracle use for validation.
-Add comments throughout contract
+#####Upgrade Contract to ERC721
+
+#####Provide Conversion Ratio to Transaction using an exchange API
+
+#####Upgrade Frontend Interface with Inventory of properties for sale
+
+
+#####Maybe create Auction system?
+
+#####Redesign Ownership/Mint Authentication Process. Perhaps consider Oracle use for validation.
+
+#####Add comments throughout contract
 
